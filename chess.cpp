@@ -4,6 +4,13 @@
 //#include <Utility>
 #include "Chess.h"
 using namespace std;
+bool moveCheck(int x, int y) {
+  if(x >= 8 || x < 0)
+    return false;
+  else if(y >= 8 || y < 0)
+    return false;
+  return true;
+}
 Player::Player() { }
 Player::Player(string s, string c) {
   name = s;
@@ -113,47 +120,61 @@ vector <pair <int, int> > chessPiece::validMoves(int x, int y, string playerColo
       }
     }
   }
-  else if(type == "Rook" && id[0] == playerColor[0])
-    {
-      for(int i = y+1; i < 8; i++) {
-	cout << i << endl;
-	if(!A.board[i][x].getFilled()) {
-	  list.push_back(make_pair(x,i));
-	}
-	else {
-	  break;
-	}
+  else if(type == "Rook" && id[0] == playerColor[0]) {
+    for(int i = y+1; i < 8; i++) {
+      //cout << i << endl;
+      if(!A.board[i][x].getFilled()) {
+	list.push_back(make_pair(x,i));
       }
-      for(int i = y-1; i > 0; i--) {
-	cout << i << endl;
-	if(!A.board[i][x].getFilled()) {
-	  list.push_back(make_pair(x,i));
-	}
-	else {
-	  break;
-	}
-      }
-      for(int i = x+1; i < 8; i++) {
-	cout << i << endl;
-	if(!A.board[y][i].getFilled()) {
-	  list.push_back(make_pair(i,y));
-	}
-	else {
-	  break;
-	}
-      }
-      for(int i = x-1; i > 0; i--) {
-	cout << i << endl;
-	if(!A.board[y][i].getFilled()) {
-	  list.push_back(make_pair(i,y));
-	}
-	else {
-	  break;
-	}
+      else {
+	break;
       }
     }
+    for(int i = y-1; i > 0; i--) {
+      //cout << i << endl;
+      if(!A.board[i][x].getFilled()) {
+	list.push_back(make_pair(x,i));
+      }
+      else {
+	break;
+      }
+    }
+    for(int i = x+1; i < 8; i++) {
+      //cout << i << endl;
+      if(!A.board[y][i].getFilled()) {
+	list.push_back(make_pair(i,y));
+      }
+      else {
+	break;
+      }
+    }
+    for(int i = x-1; i > 0; i--) {
+      //cout << i << endl;
+      if(!A.board[y][i].getFilled()) {
+	list.push_back(make_pair(i,y));
+      }
+      else {
+	break;
+      }
+    }
+  }
+  else if(type == "Knight" && id[0] == playerColor[0]) {
+    vector < pair <int,int> > knightMoves;
+    knightMoves.push_back(make_pair(x+1,y+2));
+    knightMoves.push_back(make_pair(x+2,y+1));
+    knightMoves.push_back(make_pair(x+2,y-1));
+    knightMoves.push_back(make_pair(x+1,y-2));
+    knightMoves.push_back(make_pair(x-1,y-2));
+    knightMoves.push_back(make_pair(x-2,y-1));
+    knightMoves.push_back(make_pair(x-2,y+1));
+    knightMoves.push_back(make_pair(x-1,y+2));
+    for(int i = 0; i < knightMoves.size(); i++) {
+      if(moveCheck(knightMoves[i].first,knightMoves[i].second) && !A.board[knightMoves[i].second][knightMoves[i].first].getFilled())
+	list.push_back(knightMoves[i]);
+    }
+  }
   return list;
-}				
+}
 chessPiece& chessPiece::operator=(const chessPiece& other) {
   type = other.type;
   symbol = other.symbol;
