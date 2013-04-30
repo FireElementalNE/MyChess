@@ -173,6 +173,56 @@ vector <pair <int, int> > chessPiece::validMoves(int x, int y, string playerColo
 	list.push_back(knightMoves[i]);
     }
   }
+  else if(type == "Bishop" && id[0] == playerColor[0]) {
+    int xBishop = x+1;
+    int yBishop = y+1;
+    while(xBishop < 8 && yBishop < 8 && xBishop >= 0 && yBishop >= 0) {
+      if(!A.board[yBishop][xBishop].getFilled()) {
+	list.push_back(make_pair(xBishop,yBishop));
+	xBishop++;
+	yBishop++;
+      }
+      else {
+	break;
+      }
+    }
+    xBishop = x-1;
+    yBishop = y-1;
+    while(xBishop < 8 && yBishop < 8 && xBishop >= 0 && yBishop >= 0) {
+      if(!A.board[yBishop][xBishop].getFilled()) {
+	list.push_back(make_pair(xBishop,yBishop));
+	xBishop--;
+	yBishop--;
+      }
+      else {
+	break;
+      }
+    }
+    xBishop = x-1;
+    yBishop = y+1;
+    while(xBishop < 8 && yBishop < 8 && xBishop >= 0 && yBishop >= 0) {
+      if(!A.board[yBishop][xBishop].getFilled()) {
+	list.push_back(make_pair(xBishop,yBishop));
+	xBishop--;
+	yBishop++;
+      }
+      else {
+	break;
+      }
+    }
+    xBishop = x+1;
+    yBishop = y-1;
+    while(xBishop < 8 && yBishop < 8 && xBishop >= 0 && yBishop >= 0) {
+      if(!A.board[yBishop][xBishop].getFilled()) {
+	list.push_back(make_pair(xBishop,yBishop));
+	xBishop++;
+	yBishop--;
+      }
+      else {
+	break;
+      }
+    }
+  }
   return list;
 }
 chessPiece& chessPiece::operator=(const chessPiece& other) {

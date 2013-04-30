@@ -3,13 +3,13 @@
 #include <vector>
 #include "Chess.h"
 using namespace std;
-void init(chessBoard &A);
+void init(chessBoard &A, bool testing, string test);
 string fixMe(string &s);
 string turnText(int i);
 int main()
 {
   chessBoard A;
-  init(A);
+  init(A,false,"none");
   A.print();
   cout << "Player Setup----------------------->" << endl;
   string name1 = "A";
@@ -86,7 +86,7 @@ string turnText(int i) {
     return "White Player's Turn---------------------->";
   }
 }
-void init(chessBoard &A) {
+void init(chessBoard &A, bool testing, string test) {
   vector <string> pieces;
   pieces.push_back("Pawn");
   pieces.push_back("Knight");
@@ -100,36 +100,84 @@ void init(chessBoard &A) {
   chessPiece rook = chessPiece(pieces[3]);
   chessPiece queen = chessPiece(pieces[4]);
   chessPiece king = chessPiece(pieces[5]);
-  A.placePiece(0,0,rook,"WR1");
-  A.placePiece(1,0,knight,"WK1");
-  A.placePiece(2,0,bishop,"WB1");
-  A.placePiece(3,0,queen,"WQ0");
-  A.placePiece(4,0,king,"WK0");
-  A.placePiece(5,0,bishop,"WB2");
-  A.placePiece(6,0,knight,"WK2");
-  A.placePiece(7,0,rook,"WR2");
-  A.placePiece(0,1,pawn,"WP1");
-  A.placePiece(1,1,pawn,"WP2");
-  A.placePiece(2,1,pawn,"WP3");
-  A.placePiece(3,1,pawn,"WP4");
-  A.placePiece(4,1,pawn,"WP5");
-  A.placePiece(5,1,pawn,"WP6");
-  A.placePiece(6,1,pawn,"WP7");
-  A.placePiece(7,1,pawn,"WP8");
-  A.placePiece(0,7,rook,"BR1");
-  A.placePiece(1,7,knight,"BK1");
-  A.placePiece(2,7,bishop,"BB1");
-  A.placePiece(3,7,king,"BK0");
-  A.placePiece(4,7,queen,"BQ0");
-  A.placePiece(5,7,bishop,"BB2");
-  A.placePiece(6,7,knight,"BK2");
-  A.placePiece(7,7,rook,"BR2");
-  A.placePiece(0,6,pawn,"BP1");
-  A.placePiece(1,6,pawn,"BP2");
-  A.placePiece(2,6,pawn,"BP3");
-  A.placePiece(3,6,pawn,"BP4");
-  A.placePiece(4,6,pawn,"BP5");
-  A.placePiece(5,6,pawn,"BP6");
-  A.placePiece(6,6,pawn,"BP7");
-  A.placePiece(7,6,pawn,"BP8");
+  if(!testing) {
+    A.placePiece(0,0,rook,"WR1");
+    A.placePiece(1,0,knight,"WK1");
+    A.placePiece(2,0,bishop,"WB1");
+    A.placePiece(3,0,queen,"WQ0");
+    A.placePiece(4,0,king,"WK0");
+    A.placePiece(5,0,bishop,"WB2");
+    A.placePiece(6,0,knight,"WK2");
+    A.placePiece(7,0,rook,"WR2");
+    A.placePiece(0,1,pawn,"WP1");
+    A.placePiece(1,1,pawn,"WP2");
+    A.placePiece(2,1,pawn,"WP3");
+    A.placePiece(3,1,pawn,"WP4");
+    A.placePiece(4,1,pawn,"WP5");
+    A.placePiece(5,1,pawn,"WP6");
+    A.placePiece(6,1,pawn,"WP7");
+    A.placePiece(7,1,pawn,"WP8");
+    A.placePiece(0,7,rook,"BR1");
+    A.placePiece(1,7,knight,"BK1");
+    A.placePiece(2,7,bishop,"BB1");
+    A.placePiece(3,7,king,"BK0");
+    A.placePiece(4,7,queen,"BQ0");
+    A.placePiece(5,7,bishop,"BB2");
+    A.placePiece(6,7,knight,"BK2");
+    A.placePiece(7,7,rook,"BR2");
+    A.placePiece(0,6,pawn,"BP1");
+    A.placePiece(1,6,pawn,"BP2");
+    A.placePiece(2,6,pawn,"BP3");
+    A.placePiece(3,6,pawn,"BP4");
+    A.placePiece(4,6,pawn,"BP5");
+    A.placePiece(5,6,pawn,"BP6");
+    A.placePiece(6,6,pawn,"BP7");
+    A.placePiece(7,6,pawn,"BP8");
+  }
+  else {
+    if(test == "Pawn") {
+      A.placePiece(0,1,pawn,"WP1");
+      A.placePiece(1,1,pawn,"WP2");
+      A.placePiece(2,1,pawn,"WP3");
+      A.placePiece(3,1,pawn,"WP4");
+      A.placePiece(4,1,pawn,"WP5");
+      A.placePiece(5,1,pawn,"WP6");
+      A.placePiece(6,1,pawn,"WP7");
+      A.placePiece(7,1,pawn,"WP8");
+      A.placePiece(0,6,pawn,"BP1");
+      A.placePiece(1,6,pawn,"BP2");
+      A.placePiece(2,6,pawn,"BP3");
+      A.placePiece(3,6,pawn,"BP4");
+      A.placePiece(4,6,pawn,"BP5");
+      A.placePiece(5,6,pawn,"BP6");
+      A.placePiece(6,6,pawn,"BP7");
+      A.placePiece(7,6,pawn,"BP8");
+    }
+    else if(test == "Rook") {
+      A.placePiece(7,7,rook,"BR2");
+      A.placePiece(0,7,rook,"BR1");
+      A.placePiece(7,0,rook,"WR2");
+      A.placePiece(0,0,rook,"WR1");
+    }
+    else if(test == "Knight") {
+      A.placePiece(1,7,knight,"BK1");
+      A.placePiece(6,7,knight,"BK2");
+      A.placePiece(1,0,knight,"WK1");
+      A.placePiece(6,0,knight,"WK2");
+    }
+    else if(test == "Bishop") { 
+      A.placePiece(2,7,bishop,"BB1");
+      A.placePiece(5,7,bishop,"BB2"); 
+      A.placePiece(2,0,bishop,"WB1");
+      A.placePiece(5,0,bishop,"WB2");
+    }
+    else if(test == "Queen") {
+      A.placePiece(4,7,queen,"BQ0");
+      A.placePiece(3,0,queen,"WQ0");
+    }
+    else {
+      A.placePiece(4,0,king,"WK0");
+      A.placePiece(3,7,king,"BK0");
+    }
+  }
 }
