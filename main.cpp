@@ -3,34 +3,58 @@
 #include <vector>
 #include "Chess.h"
 using namespace std;
+string whoseTurn(int turnNum);
 void init(chessBoard &A, bool testing, string test);
 string fixMe(string &s);
-string turnText(int i);
+string turnText(int i, string bName, string wName);
 int main()
 {
   chessBoard A;
   init(A,false,"none");
-  A.print();
-  cout << "Player Setup----------------------->" << endl;
+  //cout << "Player Setup----------------------->" << endl;
   string name1 = "A";
-  string name2= "b";
-  cout << "Name of white player:";
+  string name2 = "b";
+  //cout << "Name of white player:";
   //cin >> name1;
-  cout << "Name of black player:";
+  //cout << "Name of black player:";
   //cin >> name2;
   Player whitePlayer = Player(name1, "W");
   Player blackPlayer = Player(name2, "B");
   int turnNum = 1;
-  cout << turnText(turnNum) << endl;
-  string selection;
-  cout << "Coordinates of Piece to move(no spaces)";
-  cin >> selection;
+  cout << turnText(turnNum, blackPlayer.getName(), whitePlayer.getName()) << endl;
+  bool sureCheck = false;
+  string selection = "";
   while(fixMe(selection) != "exit") {
-    int x = selection[0] - 48;
-    int y = selection[1] - 48;
-    chessPiece temp = A.board[y][x].getFill();
-    cout << x << " " << y << endl;
-    cout << "The piece at x=" << x << " and y=" << y << " is a " << temp.getType() << " with ID=" << temp.getId() << endl;
+    A.print();
+    int x;
+    int y;
+    chessPiece temp;
+    sureCheck = false;
+    while(!sureCheck) {
+      cout << "Coordinates of Piece to move(no spaces): ";
+      cin >> selection;
+      cout << "You input " << selection << "." << endl;
+      x = selection[0] - 48;
+      y = selection[1] - 48;
+      if(x < 8 && y < 8 && x >=0 && y >=0 ) {
+	temp = A.board[y][x].getFill();
+	cout << whoseTurn(turnNum)[0] << " " << temp.getId()[0] << " " << temp.getId() << endl;
+	if(whoseTurn(turnNum)[0] == temp.getId()[0] && temp.getId() != "") {
+	  cout << "The piece at x=" << x << " and y=" << y << " is a " << temp.getType() << " with ID=" << temp.getId() << endl;
+	  string t9;
+	  cout << "Are You sure? (y/n):";
+	  cin >> t9;
+	  if(fixMe(t9) == "y" || fixMe(t9) == "yes") {
+	    sureCheck = true;
+	    break;
+	  }
+	}
+	else {
+	  cout << "That piece is either not yours or the Chess Square is empty." << endl;
+	  continue;
+	}
+      }
+    }
     vector <pair <int,int> > moves;
     if(turnNum % 2 == 0) {
       moves = temp.validMoves(x,y,blackPlayer.getColor(),A);
@@ -54,19 +78,14 @@ int main()
       }
       cout << "TURN SWITCH" << endl;
       turnNum++;
-      cout << turnText(turnNum) << endl;
-      cout << "Coordinates of Piece to move(no spaces)";
-      cin >> selection;
+      cout << turnText(turnNum, blackPlayer.getName(), whitePlayer.getName()) << endl;
     }
     else {
       cout << "WRONG PIECE" << endl;
       cout << "TURN SWITCH" << endl;
       turnNum++;
-      cout << turnText(turnNum) << endl;
-      cout << "Coordinates of Piece to move(no spaces)";
-      cin >> selection;
+      cout << turnText(turnNum, blackPlayer.getName(), whitePlayer.getName()) << endl;
     }
-    A.print();
   }
   //system("pause");
   return 0;
@@ -78,13 +97,15 @@ string fixMe(string &s) {
   }
   return s;
 }
-string turnText(int i) {
-  if(i % 2 == 0) {
-    return "Black Player's Turn---------------------->";
-  }
-  else {
-    return "White Player's Turn---------------------->";
-  }
+string turnText(int i, string bName, string wName) {
+  if(i % 2 == 0) 
+    return bName + "'s Turn---------------------->";
+  return wName + "'s Turn---------------------->";
+}
+string whoseTurn(int i) {
+  if(i % 2 == 0)
+    return "Black";
+  return "White";
 }
 void init(chessBoard &A, bool testing, string test) {
   vector <string> pieces;
