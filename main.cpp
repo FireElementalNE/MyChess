@@ -10,7 +10,7 @@ string turnText(int i, string bName, string wName);
 int main()
 {
   chessBoard A;
-  init(A,false,"none");
+  init(A,true,"King");
   //cout << "Player Setup----------------------->" << endl;
   string name1 = "A";
   string name2 = "b";
@@ -30,10 +30,14 @@ int main()
     int y;
     chessPiece temp;
     sureCheck = false;
+    bool brokenLoop = false;
     while(!sureCheck) {
       cout << "Coordinates of Piece to move(no spaces): ";
       cin >> selection;
       cout << "You input " << selection << "." << endl;
+      if(fixMe(selection) == "exit") {
+	break;
+      }
       x = selection[0] - 48;
       y = selection[1] - 48;
       if(x < 8 && y < 8 && x >=0 && y >=0 ) {
@@ -50,10 +54,20 @@ int main()
 	  }
 	}
 	else {
-	  cout << "That piece is either not yours or the Chess Square is empty." << endl;
-	  continue;
+	  if(x < 8 && x >= 0 && y < 8 && x >= 0 && temp.getId() != "+++" && temp.getId() != "   ") {
+	    cout << "That piece is either not yours or the Chess Square is empty." << endl;
+	    continue;
+	  }
+	  else {
+	    cout << "Fatal Error" << endl;
+	    brokenLoop = true;
+	    break;
+	  }
 	}
       }
+    }
+    if(brokenLoop) {
+      break;
     }
     vector <pair <int,int> > moves;
     if(turnNum % 2 == 0) {
@@ -63,6 +77,7 @@ int main()
       moves = temp.validMoves(x,y,whitePlayer.getColor(),A);
     }
     if(moves.size() != 0) {
+      cout << "You have " << moves.size() << " valid moves." << endl;
       for(int i = 0; i < moves.size(); i++) {
 	cout << "[" << i << "]" <<" VALID MOVE @: x=" << moves[i].first << " y=" << moves[i].second << endl;
       }
@@ -125,8 +140,8 @@ void init(chessBoard &A, bool testing, string test) {
     A.placePiece(0,0,rook,"WR1");
     A.placePiece(1,0,knight,"WK1");
     A.placePiece(2,0,bishop,"WB1");
-    A.placePiece(3,0,queen,"WQ0");
-    A.placePiece(4,0,king,"WK0");
+    A.placePiece(4,0,queen,"WQ0");
+    A.placePiece(3,0,king,"WK0");
     A.placePiece(5,0,bishop,"WB2");
     A.placePiece(6,0,knight,"WK2");
     A.placePiece(7,0,rook,"WR2");
@@ -194,10 +209,10 @@ void init(chessBoard &A, bool testing, string test) {
     }
     else if(test == "Queen") {
       A.placePiece(4,7,queen,"BQ0");
-      A.placePiece(3,0,queen,"WQ0");
+      A.placePiece(4,0,queen,"WQ0");
     }
     else {
-      A.placePiece(4,0,king,"WK0");
+      A.placePiece(3,0,king,"WK0");
       A.placePiece(3,7,king,"BK0");
     }
   }
