@@ -97,27 +97,25 @@ vector <pair <int, int> > chessPiece::validMoves(int x, int y, string playerColo
   vector <pair <int,int> > list;
   //id comes from chessPiece Class
   if(type == "Pawn" && id[0] == playerColor[0]) {
-    pair <int,int> t0;
-    pair <int,int> t1;
     if(playerColor[0] == 'W') {
-      if(!A.board[y+1][x].getFilled()) {
-	t0 = make_pair(x,y+1);
-	list.push_back(t0);
-      }
-      if(!A.board[y+2][x].getFilled() && y == 1) {
-	t1 = make_pair(x,y+2);
-	list.push_back(t1);
-      }
+      if(!A.board[y+1][x].getFilled()) 
+	list.push_back(make_pair(x,y+1));
+      if(!A.board[y+2][x].getFilled() && y == 1)
+	list.push_back(make_pair(x,y+2));
+      if(A.board[y+1][x+1].getFilled() && A.board[y+1][x+1].getFill().getId()[0] != id[0])
+	list.push_back(make_pair(x+1,y+1));
+      if(A.board[y+1][x-1].getFilled() && A.board[y+1][x-1].getFill().getId()[0] != id[0])
+	list.push_back(make_pair(x-1,y+1));
     }
     else {
-      if(!A.board[y-1][x].getFilled()) {
-	t0 = make_pair(x,y-1);
-	list.push_back(t0);
-      }
-      if(!A.board[y-2][x].getFilled() && y == 6) {
-	t1 = make_pair(x,y-2);
-	list.push_back(t1);
-      }
+      if(!A.board[y-1][x].getFilled())
+	list.push_back(make_pair(x,y-1));
+      if(!A.board[y-2][x].getFilled() && y == 6)
+	list.push_back(make_pair(x,y-2));
+      if(A.board[y-1][x+1].getFilled() && A.board[y-1][x+1].getFill().getId()[0] != id[0])
+	list.push_back(make_pair(x+1,y-1));
+      if(A.board[y-1][x-1].getFilled() && A.board[y-1][x-1].getFill().getId()[0] != id[0])
+	list.push_back(make_pair(x-1,y-1));
     }
   }
   else if(type == "Rook" && id[0] == playerColor[0]) {
@@ -125,6 +123,10 @@ vector <pair <int, int> > chessPiece::validMoves(int x, int y, string playerColo
       //cout << i << endl;
       if(!A.board[i][x].getFilled()) {
 	list.push_back(make_pair(x,i));
+      }
+      else if(A.board[i][x].getFill().getId()[0] != id[0]) {
+	list.push_back(make_pair(x,i));
+	break;
       }
       else {
 	break;
@@ -135,6 +137,10 @@ vector <pair <int, int> > chessPiece::validMoves(int x, int y, string playerColo
       if(!A.board[i][x].getFilled()) {
 	list.push_back(make_pair(x,i));
       }
+      else if(A.board[i][x].getFill().getId()[0] != id[0]) {
+	list.push_back(make_pair(x,i));
+	break;
+      }
       else {
 	break;
       }
@@ -144,6 +150,10 @@ vector <pair <int, int> > chessPiece::validMoves(int x, int y, string playerColo
       if(!A.board[y][i].getFilled()) {
 	list.push_back(make_pair(i,y));
       }
+      else if(A.board[y][i].getFill().getId()[0] != id[0]) {
+	list.push_back(make_pair(i,y));
+	break;
+      }
       else {
 	break;
       }
@@ -152,6 +162,10 @@ vector <pair <int, int> > chessPiece::validMoves(int x, int y, string playerColo
       //cout << i << endl;
       if(!A.board[y][i].getFilled()) {
 	list.push_back(make_pair(i,y));
+      }
+      else if(A.board[y][i].getFill().getId()[0] != id[0]) {
+	list.push_back(make_pair(i,y));
+	break;
       }
       else {
 	break;
@@ -171,6 +185,8 @@ vector <pair <int, int> > chessPiece::validMoves(int x, int y, string playerColo
     for(int i = 0; i < knightMoves.size(); i++) {
       if(moveCheck(knightMoves[i].first,knightMoves[i].second) && !A.board[knightMoves[i].second][knightMoves[i].first].getFilled())
 	list.push_back(knightMoves[i]);
+      else if(moveCheck(knightMoves[i].first,knightMoves[i].second) && A.board[knightMoves[i].second][knightMoves[i].first].getFill().getId()[0] != id[0])
+	list.push_back(knightMoves[i]);
     }
   }
   else if(type == "Bishop" && id[0] == playerColor[0]) {
@@ -181,6 +197,10 @@ vector <pair <int, int> > chessPiece::validMoves(int x, int y, string playerColo
 	list.push_back(make_pair(xBishop,yBishop));
 	xBishop++;
 	yBishop++;
+      }
+      else if(A.board[yBishop][xBishop].getFill().getId()[0] != id[0]) {
+	list.push_back(make_pair(xBishop,yBishop));
+	break;
       }
       else {
 	break;
@@ -193,6 +213,10 @@ vector <pair <int, int> > chessPiece::validMoves(int x, int y, string playerColo
 	list.push_back(make_pair(xBishop,yBishop));
 	xBishop--;
 	yBishop--;
+      }
+      else if(A.board[yBishop][xBishop].getFill().getId()[0] != id[0]) {
+	list.push_back(make_pair(xBishop,yBishop));
+	break;
       }
       else {
 	break;
@@ -206,6 +230,10 @@ vector <pair <int, int> > chessPiece::validMoves(int x, int y, string playerColo
 	xBishop--;
 	yBishop++;
       }
+      else if(A.board[yBishop][xBishop].getFill().getId()[0] != id[0]) {
+	list.push_back(make_pair(xBishop,yBishop));
+	break;
+      }
       else {
 	break;
       }
@@ -217,6 +245,10 @@ vector <pair <int, int> > chessPiece::validMoves(int x, int y, string playerColo
 	list.push_back(make_pair(xBishop,yBishop));
 	xBishop++;
 	yBishop--;
+      }
+      else if(A.board[yBishop][xBishop].getFill().getId()[0] != id[0]) {
+	list.push_back(make_pair(xBishop,yBishop));
+	break;
       }
       else {
 	break;
@@ -229,6 +261,10 @@ vector <pair <int, int> > chessPiece::validMoves(int x, int y, string playerColo
       if(!A.board[i][x].getFilled()) {
 	list.push_back(make_pair(x,i));
       }
+      else if(A.board[i][x].getFill().getId()[0] != id[0]) {
+	list.push_back(make_pair(x,i));
+	break;
+      }
       else {
 	break;
       }
@@ -237,6 +273,10 @@ vector <pair <int, int> > chessPiece::validMoves(int x, int y, string playerColo
       //cout << i << endl;
       if(!A.board[i][x].getFilled()) {
 	list.push_back(make_pair(x,i));
+      }
+      else if(A.board[i][x].getFill().getId()[0] != id[0]) {
+	list.push_back(make_pair(x,i));
+	break;
       }
       else {
 	break;
@@ -247,6 +287,10 @@ vector <pair <int, int> > chessPiece::validMoves(int x, int y, string playerColo
       if(!A.board[y][i].getFilled()) {
 	list.push_back(make_pair(i,y));
       }
+      else if(A.board[y][i].getFill().getId()[0] != id[0]) {
+	list.push_back(make_pair(i,y));
+	break;
+      }
       else {
 	break;
       }
@@ -255,6 +299,10 @@ vector <pair <int, int> > chessPiece::validMoves(int x, int y, string playerColo
       //cout << i << endl;
       if(!A.board[y][i].getFilled()) {
 	list.push_back(make_pair(i,y));
+      }
+      else if(A.board[i][x].getFill().getId()[0] != id[0]) {
+	list.push_back(make_pair(i,y));
+	break;
       }
       else {
 	break;
@@ -268,6 +316,10 @@ vector <pair <int, int> > chessPiece::validMoves(int x, int y, string playerColo
 	xBishop++;
 	yBishop++;
       }
+      else if(A.board[yBishop][xBishop].getFill().getId()[0] != id[0]) {
+	list.push_back(make_pair(xBishop,yBishop));
+	break;
+      }
       else {
 	break;
       }
@@ -279,6 +331,10 @@ vector <pair <int, int> > chessPiece::validMoves(int x, int y, string playerColo
 	list.push_back(make_pair(xBishop,yBishop));
 	xBishop--;
 	yBishop--;
+      }
+      else if(A.board[yBishop][xBishop].getFill().getId()[0] != id[0]) {
+	list.push_back(make_pair(xBishop,yBishop));
+	break;
       }
       else {
 	break;
@@ -292,6 +348,10 @@ vector <pair <int, int> > chessPiece::validMoves(int x, int y, string playerColo
 	xBishop--;
 	yBishop++;
       }
+      else if(A.board[yBishop][xBishop].getFill().getId()[0] != id[0]) {
+	list.push_back(make_pair(xBishop,yBishop));
+	break;
+      }
       else {
 	break;
       }
@@ -303,6 +363,10 @@ vector <pair <int, int> > chessPiece::validMoves(int x, int y, string playerColo
 	list.push_back(make_pair(xBishop,yBishop));
 	xBishop++;
 	yBishop--;
+      }
+      else if(A.board[yBishop][xBishop].getFill().getId()[0] != id[0]) {
+	list.push_back(make_pair(xBishop,yBishop));
+	break;
       }
       else {
 	break;
@@ -321,6 +385,8 @@ vector <pair <int, int> > chessPiece::validMoves(int x, int y, string playerColo
     kingMoves.push_back(make_pair(x+1,y-1));
     for(int i = 0; i < kingMoves.size(); i++) {
       if(moveCheck(kingMoves[i].first,kingMoves[i].second) && !A.board[kingMoves[i].second][kingMoves[i].first].getFilled())
+	list.push_back(kingMoves[i]);
+      else if(moveCheck(kingMoves[i].first,kingMoves[i].second) && A.board[kingMoves[i].second][kingMoves[i].first].getFill().getId()[0] != id[0])
 	list.push_back(kingMoves[i]);
     }
   }
