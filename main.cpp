@@ -10,7 +10,7 @@ string turnText(int i, string bName, string wName);
 int main()
 {
   chessBoard A;
-  init(A,true,"King");
+  init(A,false,"none");
   //cout << "Player Setup----------------------->" << endl;
   string name1 = "A";
   string name2 = "b";
@@ -44,7 +44,7 @@ int main()
 	temp = A.board[y][x].getFill();
 	cout << whoseTurn(turnNum)[0] << " " << temp.getId()[0] << " " << temp.getId() << endl;
 	if(whoseTurn(turnNum)[0] == temp.getId()[0] && temp.getId() != "") {
-	  cout << "The piece at x=" << x << " and y=" << y << " is a " << temp.getType() << " with ID=" << temp.getId() << endl;
+	  cout << "The piece at x=" << x << " and y=" << y << " is a " << temp.getType() << " with ID=" << temp.getId() << " and with color=" << temp.getId()[0] << endl;
 	  string t9;
 	  cout << "Are You sure? (y/n):";
 	  cin >> t9;
