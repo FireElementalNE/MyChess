@@ -7,8 +7,11 @@ string whoseTurn(int turnNum);
 void init(chessBoard &A, bool testing, string test);
 string fixMe(string &s);
 string turnText(int i, string bName, string wName);
+void addMove(vector < pair <string,pair <int, int > > > &movesList, pair <int,int> space, string name);
+bool hasMoved(vector < pair <string,pair <int,int> > > moves, string s);
 int main()
 {
+  vector < pair <string,pair <int, int > > > movesList;
   chessBoard A;
   init(A,false,"none");
   //cout << "Player Setup----------------------->" << endl;
@@ -90,6 +93,7 @@ int main()
       }
       else {
 	A.move(x,y,moves[choice].first,moves[choice].second);
+	addMove( movesList, make_pair(moves[choice].second, moves[choice].first) , A.board[moves[choice].second][moves[choice].first].getFill().getId());
       }
       cout << "TURN SWITCH" << endl;
       turnNum++;
@@ -121,6 +125,18 @@ string whoseTurn(int i) {
   if(i % 2 == 0)
     return "Black";
   return "White";
+}
+
+bool hasMoved(vector < pair <string,pair <int,int> > > moves, string s) {
+  for( int i = 0; i < moves.size(); i++ ) {
+    if( s == moves[i].first ) {
+      return true;
+    }
+  }
+  return false;
+}
+void addMove(vector < pair <string,pair <int, int > > > &movesList, pair <int,int> space, string name) {
+  movesList.push_back(make_pair(name,space));
 }
 void init(chessBoard &A, bool testing, string test) {
   vector <string> pieces;

@@ -79,7 +79,7 @@ void chessSquare::setFilled(bool temp) {
   filled = temp;
 }
 bool chessSquare::getFilled() {
-  return 	filled;
+  return filled;
 }
 chessBoard::chessBoard() {
   for(int y = 0; y < 8; y++) {
@@ -433,6 +433,7 @@ void chessBoard::move(int startX, int startY, int endX, int endY) {
   else {
     placePiece(startX,startY,BLANK,"+++");
   }
+  //cout << temp.getHasMoved() << endl;
   board[endY][endX].setFill(temp);
   board[endY][endX].setFilled(true);
   board[startY][startX].setFilled(false);
