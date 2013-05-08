@@ -36,7 +36,7 @@ class chessPiece
   void setId(string s);
   string getSymbol();
   void setSymbol(string c);
-  vector <pair <int, int> > validMoves(int x, int y, string playerColor, chessBoard A);
+  vector <pair <int, int> > validMoves(int x, int y, string playerColor, chessBoard A, vector < pair <string,pair <int, int > > > movesList);
 };
 class chessSquare
 {

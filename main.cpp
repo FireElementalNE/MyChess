@@ -8,7 +8,7 @@ void init(chessBoard &A, bool testing, string test);
 string fixMe(string &s);
 string turnText(int i, string bName, string wName);
 void addMove(vector < pair <string,pair <int, int > > > &movesList, pair <int,int> space, string name);
-bool hasMoved(vector < pair <string,pair <int,int> > > moves, string s);
+bool hasMoved2(vector < pair <string,pair <int,int> > > moves, string s);
 int main()
 {
   vector < pair <string,pair <int, int > > > movesList;
@@ -74,10 +74,10 @@ int main()
     }
     vector <pair <int,int> > moves;
     if(turnNum % 2 == 0) {
-      moves = temp.validMoves(x,y,blackPlayer.getColor(),A);
+      moves = temp.validMoves(x,y,blackPlayer.getColor(),A, movesList);
     }
     else {
-      moves = temp.validMoves(x,y,whitePlayer.getColor(),A);
+      moves = temp.validMoves(x,y,whitePlayer.getColor(),A, movesList);
     }
     if(moves.size() != 0) {
       cout << "You have " << moves.size() << " valid moves." << endl;
@@ -92,8 +92,36 @@ int main()
 	continue;
       }
       else {
-	A.move(x,y,moves[choice].first,moves[choice].second);
-	addMove( movesList, make_pair(moves[choice].second, moves[choice].first) , A.board[moves[choice].second][moves[choice].first].getFill().getId());
+	int newX = moves[choice].first;
+	int newY = moves[choice].second;
+	if(turnNum % 2 == 1 && x == 3 && y == 0 && newX == 2 && newY == 0) {
+	  A.move(x,y,newX,newY);
+	  A.move(0,0,3,0);
+	  addMove( movesList, make_pair(newX, newY) , A.board[newX][newY].getFill().getId());
+	  addMove( movesList, make_pair(x,y) , "WR1" );
+	}
+	else if (turnNum % 2 == 1 && x == 3 && y == 0 && newX == 6 && newY == 0) {
+	  A.move(x,y,newX,newY);
+	  A.move(7,0,5,0);
+	  addMove( movesList, make_pair(newX, newY) , A.board[newX][newY].getFill().getId());
+	  addMove( movesList, make_pair(x,y) , "WR2" );
+	}
+	else if(turnNum % 2 == 0 && x == 3 && y == 7 && newX == 2 && newY == 7) {
+	  A.move(x,y,newX,newY);
+	  A.move(0,7,3,7);
+	  addMove( movesList, make_pair(newX, newY) , A.board[newX][newY].getFill().getId());
+	  addMove( movesList, make_pair(x,y) , "BR1" );
+	}
+	else if (turnNum % 2 == 0 && x == 3 && y == 7 && newX == 6 && newY == 7) {
+	  A.move(x,y,newX,newY);
+	  A.move(7,7,5,7);
+	  addMove( movesList, make_pair(newX, newY) , A.board[newX][newY].getFill().getId());
+	  addMove( movesList, make_pair(x,y) , "BR2" );
+	}
+	else {
+	  A.move(x,y,newX,newY);
+	  addMove( movesList, make_pair(newY, newX) , A.board[newY][newX].getFill().getId());
+	}
       }
       cout << "TURN SWITCH" << endl;
       turnNum++;
@@ -116,6 +144,14 @@ string fixMe(string &s) {
   }
   return s;
 }
+bool hasMoved2(vector < pair <string,pair <int,int> > > moves, string s) {
+  for( int i = 0; i < moves.size(); i++ ) {
+    if( s == moves[i].first ) {
+      return true;
+    }
+  }
+  return false;
+}
 string turnText(int i, string bName, string wName) {
   if(i % 2 == 0) 
     return bName + "'s Turn---------------------->";
@@ -125,15 +161,6 @@ string whoseTurn(int i) {
   if(i % 2 == 0)
     return "Black";
   return "White";
-}
-
-bool hasMoved(vector < pair <string,pair <int,int> > > moves, string s) {
-  for( int i = 0; i < moves.size(); i++ ) {
-    if( s == moves[i].first ) {
-      return true;
-    }
-  }
-  return false;
 }
 void addMove(vector < pair <string,pair <int, int > > > &movesList, pair <int,int> space, string name) {
   movesList.push_back(make_pair(name,space));
@@ -227,7 +254,15 @@ void init(chessBoard &A, bool testing, string test) {
       A.placePiece(4,7,queen,"BQ0");
       A.placePiece(4,0,queen,"WQ0");
     }
-    else {
+    else if (test == "King") {
+      A.placePiece(3,0,king,"WK0");
+      A.placePiece(3,7,king,"BK0");
+    }
+    else if (test == "Castle") {
+      A.placePiece(7,7,rook,"BR2");
+      A.placePiece(0,7,rook,"BR1");
+      A.placePiece(7,0,rook,"WR2");
+      A.placePiece(0,0,rook,"WR1");
       A.placePiece(3,0,king,"WK0");
       A.placePiece(3,7,king,"BK0");
     }

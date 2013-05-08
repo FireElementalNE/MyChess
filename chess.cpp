@@ -4,6 +4,14 @@
 //#include <Utility>
 #include "Chess.h"
 using namespace std;
+bool hasMoved(vector < pair <string,pair <int,int> > > moves, string s) {
+  for( int i = 0; i < moves.size(); i++ ) {
+    if( s == moves[i].first ) {
+      return true;
+    }
+  }
+  return false;
+}
 bool moveCheck(int x, int y) {
   if(x >= 8 || x < 0)
     return false;
@@ -93,7 +101,7 @@ chessBoard::chessBoard() {
     }
   }
 }
-vector <pair <int, int> > chessPiece::validMoves(int x, int y, string playerColor, chessBoard A) {
+vector <pair <int, int> > chessPiece::validMoves(int x, int y, string playerColor, chessBoard A, vector < pair <string,pair <int, int > > > movesList) {
   vector <pair <int,int> > list;
   //id comes from chessPiece Class
   if(type == "Pawn" && id[0] == playerColor[0]) {
@@ -388,6 +396,19 @@ vector <pair <int, int> > chessPiece::validMoves(int x, int y, string playerColo
 	list.push_back(kingMoves[i]);
       else if(moveCheck(kingMoves[i].first,kingMoves[i].second) && A.board[kingMoves[i].second][kingMoves[i].first].getFill().getId()[0] != id[0])
 	list.push_back(kingMoves[i]);
+    }
+    //Castle check
+    if(playerColor[0] == 'W') {
+      if(!hasMoved(movesList,id) && !hasMoved(movesList,"WR2") && !A.board[5][0].getFilled() && !A.board[6][0].getFilled()) 
+	list.push_back(make_pair(6,0));
+      if(!hasMoved(movesList,id) && !hasMoved(movesList,"WR1") && !A.board[1][0].getFilled() && !A.board[2][0].getFilled() && !A.board[3][0].getFilled()) 
+	list.push_back(make_pair(2,0));
+    }
+    else {
+      if(!hasMoved(movesList,id) && !hasMoved(movesList,"BR2") && !A.board[5][7].getFilled() && !A.board[6][7].getFilled()) 
+	list.push_back(make_pair(6,7));
+      if(!hasMoved(movesList,id) && !hasMoved(movesList,"BR1") && !A.board[1][7].getFilled() && !A.board[2][7].getFilled() && !A.board[3][7].getFilled()) 
+	list.push_back(make_pair(2,7));
     }
   }
     
