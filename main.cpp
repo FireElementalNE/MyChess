@@ -9,6 +9,9 @@ string fixMe(string &s);
 string turnText(int i, string bName, string wName);
 void addMove(vector < pair <string,pair <int, int > > > &movesList, pair <int,int> space, string name);
 bool hasMoved2(vector < pair <string,pair <int,int> > > moves, string s);
+bool inCheck(string playerColor, chessBoard A, vector < pair <string,pair <int, int > > > movesList);
+pair <int,int> findKing(chessBoard A, string playerColor);
+bool isKing(chessBoard A, string playerColor);
 int main()
 {
   vector < pair <string,pair <int, int > > > movesList;
@@ -34,6 +37,16 @@ int main()
     chessPiece temp;
     sureCheck = false;
     bool brokenLoop = false;
+    bool isInCheck = false;
+    if(!isKing(A,whoseTurn(turnNum))) {
+      cout << "Game Over " << whoseTurn(turnNum) << " Wins." << endl;
+      brokenLoop = true;
+      break;
+    }
+    if(inCheck(whoseTurn(turnNum),A,movesList)) {
+      cout << "You are in Check..." << endl;
+      isInCheck = true;
+    }
     while(!sureCheck) {
       cout << "Coordinates of Piece to move(no spaces): ";
       cin >> selection;
@@ -41,11 +54,12 @@ int main()
       if(fixMe(selection) == "exit") {
 	break;
       }
-      x = selection[0] - 48;
-      y = selection[1] - 48;
+      x = selection[0] - 97;
+      y = 56 - selection[1];
+      //cout << x << " " << x << endl;
       if(x < 8 && y < 8 && x >=0 && y >=0 ) {
 	temp = A.board[y][x].getFill();
-	cout << whoseTurn(turnNum)[0] << " " << temp.getId()[0] << " " << temp.getId() << endl;
+	//cout << whoseTurn(turnNum)[0] << " " << temp.getId()[0] << " " << temp.getId() << endl;
 	if(whoseTurn(turnNum)[0] == temp.getId()[0] && temp.getId() != "") {
 	  cout << "The piece at x=" << x << " and y=" << y << " is a " << temp.getType() << " with ID=" << temp.getId() << " and with color=" << temp.getId()[0] << endl;
 	  string t9;
@@ -55,6 +69,8 @@ int main()
 	    sureCheck = true;
 	    break;
 	  }
+	  else 
+	    break;
 	}
 	else {
 	  if(x < 8 && x >= 0 && y < 8 && x >= 0 && temp.getId() != "+++" && temp.getId() != "   ") {
@@ -82,7 +98,9 @@ int main()
     if(moves.size() != 0) {
       cout << "You have " << moves.size() << " valid moves." << endl;
       for(int i = 0; i < moves.size(); i++) {
-	cout << "[" << i << "]" <<" VALID MOVE @: x=" << moves[i].first << " y=" << moves[i].second << endl;
+	char c1 = moves[i].first + 97;
+	char c2 = -moves[i].second + 56;
+	cout << "[" << i << "]" <<" VALID MOVE @: " << c1 << " " << c2 << endl;
       }
       int choice;
       cout << ">";
@@ -123,9 +141,11 @@ int main()
 	  addMove( movesList, make_pair(newY, newX) , A.board[newY][newX].getFill().getId());
 	}
       }
-      cout << "TURN SWITCH" << endl;
-      turnNum++;
-      cout << turnText(turnNum, blackPlayer.getName(), whitePlayer.getName()) << endl;
+      if(!brokenLoop) {
+	cout << "TURN SWITCH" << endl;
+	turnNum++;
+	cout << turnText(turnNum, blackPlayer.getName(), whitePlayer.getName()) << endl;
+      }
     }
     else {
       cout << "WRONG PIECE" << endl;
@@ -134,8 +154,66 @@ int main()
       cout << turnText(turnNum, blackPlayer.getName(), whitePlayer.getName()) << endl;
     }
   }
+  cout << "Goodbye!" << endl;
   //system("pause");
   return 0;
+}
+bool isKing(chessBoard A, string playerColor){ 
+  for(int i = 0; i < 8; i++) {
+    for (int j = 0; j < 8; j++) {
+      if( A.board[i][j].getFill().getId()[0] == playerColor[0] && A.board[i][j].getFill().getType() == "King") {
+	return true;
+      }
+    }
+  }
+  return false;
+}
+pair <int,int> findKing(chessBoard A, string playerColor) {
+ for(int i = 0; i < 8; i++) {
+    for (int j = 0; j < 8; j++) {
+      if( A.board[i][j].getFill().getId()[0] == playerColor[0] && A.board[i][j].getFill().getType() == "King") {
+	return make_pair(j,i);
+      }
+    }
+  }
+}
+bool inCheck(string playerColor, chessBoard A, vector < pair <string,pair <int, int > > > movesList ) {
+  vector <pair < chessPiece, pair < int,int > > > list;
+  vector <pair < chessPiece, pair <int,int> > > potentialMoves;
+  pair <int,int> kingPlace;
+  string playerKing = "";
+  playerKing += playerColor[0];
+  playerKing += 'K'; 
+  playerKing += '0';
+  for(int i = 0; i < 8; i++) {
+    for (int j = 0; j < 8; j++) {
+      if( A.board[i][j].getFilled() && A.board[i][j].getFill().getId()[0] != playerKing[0] ) {
+	pair <int,int> t0 = make_pair(i,j);
+	list.push_back(make_pair(A.board[i][j].getFill(),t0));
+      }
+      else if(A.board[i][j].getFill().getId() == playerKing) {
+	kingPlace = make_pair(j,i);
+      }
+    }
+  }
+  cout << kingPlace.first << " " << kingPlace.second << endl;
+  for( int i = 0; i < list.size(); i++ ) {
+    vector < pair <int,int> > t2;
+    if(list[i].first.getId()[0] == 'B' )
+      t2 = list[i].first.validMoves(list[i].second.second,list[i].second.first,"Black",A,movesList);
+    else
+      t2 = list[i].first.validMoves(list[i].second.second,list[i].second.first,"White",A,movesList);
+    for(int j = 0; j < t2.size(); j++) {
+      potentialMoves.push_back(make_pair(list[i].first,t2[j]));
+    }
+  }
+  for(int i = 0; i < potentialMoves.size(); i++ ) {
+    if(potentialMoves[i].second.first == kingPlace.first && potentialMoves[i].second.second == kingPlace.second) {      
+      cout << potentialMoves[i].first.getId() << endl;
+      return true;
+    }
+  }
+  return false;
 }
 string fixMe(string &s) {
   for(int i = 0; i < s.length(); i++) {
@@ -265,6 +343,11 @@ void init(chessBoard &A, bool testing, string test) {
       A.placePiece(0,0,rook,"WR1");
       A.placePiece(3,0,king,"WK0");
       A.placePiece(3,7,king,"BK0");
+    }
+    else if (test == "special" ) {
+      A.placePiece(4,7,rook,"BR1");
+      A.placePiece(1,7,king,"BK0");
+      A.placePiece(4,0,king,"WK0");
     }
   }
 }

@@ -127,6 +127,7 @@ vector <pair <int, int> > chessPiece::validMoves(int x, int y, string playerColo
     }
   }
   else if(type == "Rook" && id[0] == playerColor[0]) {
+    //cout <<"its a rook" << endl;
     for(int i = y+1; i < 8; i++) {
       //cout << i << endl;
       if(!A.board[i][x].getFilled()) {
@@ -421,13 +422,11 @@ chessPiece& chessPiece::operator=(const chessPiece& other) {
   return *this;
 }
 void chessBoard::print() {
-  cout << "  ";
-  for(int i = 0; i < 8; i++) {
-    cout << "   " << i << "   ";
-  }
-  cout << endl << endl << endl;
+  // cout << "  ";
+  
+  cout << endl << endl;
   for(int y = 0; y < 8; y++) {
-    cout << y << " ";
+    cout << -1*(y-8) << " ";
     for(int x = 0; x < 8; x++) {
       if(board[y][x].color == 'w' && !board[y][x].getFilled()) {
 	cout << " [   ] ";
@@ -439,8 +438,14 @@ void chessBoard::print() {
 	cout << " [" <<  board[y][x].getFill().getId() << "] ";
       }
     }
-    cout << endl << endl << endl;
+    cout << endl << endl;
   }
+  cout << "  ";
+  for(int i = 0; i < 8; i++) {
+    char c = 48+i+49;
+    cout << "   " << c << "   ";
+  }
+  cout << endl << endl;
   
 }
 
