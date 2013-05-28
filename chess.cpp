@@ -4,6 +4,50 @@
 //#include <Utility>
 #include "Chess.h"
 using namespace std;
+bool canCastle(vector < pair <string,pair <int, int > > > movesList,char pcolor,chessBoard A) {
+  if (pcolor == 'W') {
+    bool sawWR1 = false;
+    bool sawWR2 = false;
+    for(int i = 0; i < movesList.size(); i++) {
+      if(movesList[i].first == "WK0")
+	return false;
+      else if(movesList[i].first == "WR1")
+	sawWR1 = true;
+      if(movesList[i].first == "WR2")
+	sawWR2 = true;
+    }
+    if(sawWR1 && sawWR2)
+      return false;
+    if(A.board[0][3].getFill().getId() != "WK0")
+      return false;
+    if(A.board[0][0].getFill().getId() != "WR1")
+      return false;
+    if(A.board[0][7].getFill().getId() != "WR2")
+      return false;
+    return true;
+  }
+  else {
+    bool sawBR1 = false;
+    bool sawBR2 = false;
+    for(int i = 0; i < movesList.size(); i++) {
+      if(movesList[i].first == "BK0")
+	return false;
+      else if(movesList[i].first == "BR1")
+	sawBR1 = true;
+      if(movesList[i].first == "BR2")
+	sawBR2 = true;
+    }
+    if(sawBR1 && sawBR2)
+      return false;
+    if(A.board[7][3].getFill().getId() != "BK0")
+      return false;
+    if(A.board[7][0].getFill().getId() != "BR1")
+      return false;
+    if(A.board[7][7].getFill().getId() != "BR2")
+      return false;
+    return true;
+  }
+}
 bool hasMoved(vector < pair <string,pair <int,int> > > moves, string s) {
   for( int i = 0; i < moves.size(); i++ ) {
     if( s == moves[i].first ) {
@@ -399,16 +443,17 @@ vector <pair <int, int> > chessPiece::validMoves(int x, int y, string playerColo
 	list.push_back(kingMoves[i]);
     }
     //Castle check
+    //bool canCastle(vector < pair <string,pair <int, int > > > movesList,char pcolor,chessBoard A) {
     if(playerColor[0] == 'W') {
-      if(!hasMoved(movesList,id) && !hasMoved(movesList,"WR2") && !A.board[5][0].getFilled() && !A.board[6][0].getFilled()) 
+      if(!hasMoved(movesList,id) && !hasMoved(movesList,"WR2") && !A.board[5][0].getFilled() && !A.board[6][0].getFilled() && canCastle(movesList,playerColor[0],A)) 
 	list.push_back(make_pair(6,0));
-      if(!hasMoved(movesList,id) && !hasMoved(movesList,"WR1") && !A.board[1][0].getFilled() && !A.board[2][0].getFilled() && !A.board[3][0].getFilled()) 
+      if(!hasMoved(movesList,id) && !hasMoved(movesList,"WR1") && !A.board[1][0].getFilled() && !A.board[2][0].getFilled() && !A.board[3][0].getFilled() && canCastle(movesList,playerColor[0],A)) 
 	list.push_back(make_pair(2,0));
     }
     else {
-      if(!hasMoved(movesList,id) && !hasMoved(movesList,"BR2") && !A.board[5][7].getFilled() && !A.board[6][7].getFilled()) 
+      if(!hasMoved(movesList,id) && !hasMoved(movesList,"BR2") && !A.board[5][7].getFilled() && !A.board[6][7].getFilled() && canCastle(movesList,playerColor[0],A)) 
 	list.push_back(make_pair(6,7));
-      if(!hasMoved(movesList,id) && !hasMoved(movesList,"BR1") && !A.board[1][7].getFilled() && !A.board[2][7].getFilled() && !A.board[3][7].getFilled()) 
+      if(!hasMoved(movesList,id) && !hasMoved(movesList,"BR1") && !A.board[1][7].getFilled() && !A.board[2][7].getFilled() && !A.board[3][7].getFilled() && canCastle(movesList,playerColor[0],A)) 
 	list.push_back(make_pair(2,7));
     }
   }
@@ -480,8 +525,9 @@ void chessBoard::colorof(int x, int y) {
 		cout << "Square (" << y << "," << x << ") is White" << endl;
   }
 }
-void chessBoard::placePiece(int x, int y, chessPiece temp, string info) {
+void chessBoard::placePiece(int x, int y, chessPiece temp, string info) {  
   temp.setId(info);
   board[y][x].setFilled(true);
   board[y][x].setFill(temp);
+  cout << board[x][y].getFill().getId() << endl;
 }

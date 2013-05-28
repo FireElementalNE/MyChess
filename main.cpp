@@ -16,7 +16,11 @@ int main()
 {
   vector < pair <string,pair <int, int > > > movesList;
   chessBoard A;
-  init(A,false,"none");
+  init(A,true,"Castle");
+  int wQCount = 1, bQCount = 1;
+  int wKCount = 2, bKCount = 2;
+  int wRCount = 2, bRCount = 2;
+  int wBCount = 2, bBCount = 2;
   //cout << "Player Setup----------------------->" << endl;
   string name1 = "A";
   string name2 = "b";
@@ -115,30 +119,98 @@ int main()
 	if(turnNum % 2 == 1 && x == 3 && y == 0 && newX == 2 && newY == 0) {
 	  A.move(x,y,newX,newY);
 	  A.move(0,0,3,0);
-	  addMove( movesList, make_pair(newX, newY) , A.board[newX][newY].getFill().getId());
+	  addMove( movesList, make_pair(newX, newY) , A.board[newY][newX].getFill().getId());
 	  addMove( movesList, make_pair(x,y) , "WR1" );
 	}
 	else if (turnNum % 2 == 1 && x == 3 && y == 0 && newX == 6 && newY == 0) {
 	  A.move(x,y,newX,newY);
 	  A.move(7,0,5,0);
-	  addMove( movesList, make_pair(newX, newY) , A.board[newX][newY].getFill().getId());
+	  addMove( movesList, make_pair(newX, newY) , A.board[newY][newX].getFill().getId());
 	  addMove( movesList, make_pair(x,y) , "WR2" );
 	}
 	else if(turnNum % 2 == 0 && x == 3 && y == 7 && newX == 2 && newY == 7) {
 	  A.move(x,y,newX,newY);
 	  A.move(0,7,3,7);
-	  addMove( movesList, make_pair(newX, newY) , A.board[newX][newY].getFill().getId());
+	  addMove( movesList, make_pair(newX, newY) , A.board[newY][newX].getFill().getId());
 	  addMove( movesList, make_pair(x,y) , "BR1" );
 	}
 	else if (turnNum % 2 == 0 && x == 3 && y == 7 && newX == 6 && newY == 7) {
 	  A.move(x,y,newX,newY);
 	  A.move(7,7,5,7);
-	  addMove( movesList, make_pair(newX, newY) , A.board[newX][newY].getFill().getId());
+	  addMove( movesList, make_pair(newX, newY) , A.board[newY][newX].getFill().getId());
 	  addMove( movesList, make_pair(x,y) , "BR2" );
 	}
 	else {
-	  A.move(x,y,newX,newY);
-	  addMove( movesList, make_pair(newY, newX) , A.board[newY][newX].getFill().getId());
+	  if(turnNum % 2 == 1 && A.board[y][x].getFill().getType() == "Pawn" && newY == 7) {
+	    int t0;
+	    cout << "What would you like to turn this piece into? (number only)" << endl;
+	    cout << "[0] Knight" << endl;
+	    cout << "[1] Bishop" << endl;
+	    cout << "[2] Rook" << endl;
+	    cout << "[3] Queen" << endl;
+	    cout << ">";
+	    cin >> t0;
+	    A.move(x,y,newX,newY);
+	    chessPiece pawn = chessPiece("Pawn");
+	    chessPiece knight = chessPiece("Knight");
+	    chessPiece bishop = chessPiece("Bishop");
+	    chessPiece rook = chessPiece("Rook");
+	    chessPiece queen = chessPiece("Queen");
+	    if (t0 == 0 ) {
+	      wKCount++;
+	      A.placePiece(newX,newY,knight,"WK"+to_string(wKCount));
+	    }
+	    else if (t0 == 1 ) {
+	      wBCount++;
+	      A.placePiece(newX,newY,bishop,"WB"+to_string(wBCount));
+	    }
+	    else if (t0 == 2 ) {
+	      wRCount++;
+	      A.placePiece(newX,newY,rook,"WR"+to_string(wRCount));
+	    }
+	    else if (t0 == 3 ) {
+	      wQCount++;
+	      A.placePiece(newX,newY,queen,"WQ"+to_string(wQCount));
+	    }
+	    addMove( movesList, make_pair(newY, newX) , A.board[newY][newX].getFill().getId());
+	  }
+	  else if(turnNum % 2 == 0 && A.board[y][x].getFill().getType() == "Pawn" && newY == 0) {
+	    int t0;
+	    cout << "What would you like to turn this piece into? (number only)" << endl;
+	    cout << "[0] Knight" << endl;
+	    cout << "[1] Bishop" << endl;
+	    cout << "[2] Rook" << endl;
+	    cout << "[3] Queen" << endl;
+	    cout << ">";
+	    cin >> t0;
+	    A.move(x,y,newX,newY);
+	    chessPiece pawn = chessPiece("Pawn");
+	    chessPiece knight = chessPiece("Knight");
+	    chessPiece bishop = chessPiece("Bishop");
+	    chessPiece rook = chessPiece("Rook");
+	    chessPiece queen = chessPiece("Queen");
+	    if (t0 == 0 ) {
+	      bKCount++;
+	      A.placePiece(newX,newY,knight,"BK"+to_string(bKCount));
+	    }
+	    else if (t0 == 1 ) {
+	      bBCount++;
+	      A.placePiece(newX,newY,bishop,"BB"+to_string(bBCount));
+	    }
+	    else if (t0 == 2 ) {
+	      bRCount++;
+	      A.placePiece(newX,newY,rook,"BR"+to_string(bRCount));
+	    }
+	    else if (t0 == 3 ) {
+	      bQCount++;
+	      A.placePiece(newX,newY,queen,"BQ"+to_string(bQCount));
+	    }
+	    addMove( movesList, make_pair(newY, newX) , A.board[newY][newX].getFill().getId());
+	  }
+	  else {
+	    A.move(x,y,newX,newY);
+	    addMove( movesList, make_pair(newY, newX) , A.board[newY][newX].getFill().getId());
+	  }
 	}
       }
       if(!brokenLoop) {
@@ -345,9 +417,10 @@ void init(chessBoard &A, bool testing, string test) {
       A.placePiece(3,7,king,"BK0");
     }
     else if (test == "special" ) {
-      A.placePiece(4,7,rook,"BR1");
-      A.placePiece(1,7,king,"BK0");
-      A.placePiece(4,0,king,"WK0");
+      A.placePiece(6,6,pawn,"WP1");
+      A.placePiece(6,1,pawn,"BP1");
+      A.placePiece(3,0,king,"WK0");
+      A.placePiece(3,7,king,"BK0");
     }
   }
 }
