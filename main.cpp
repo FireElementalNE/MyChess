@@ -16,7 +16,7 @@ int main()
 {
   vector < pair <string,pair <int, int > > > movesList;
   chessBoard A;
-  init(A,true,"Castle");
+  init(A,false,"none");
   int wQCount = 1, bQCount = 1;
   int wKCount = 2, bKCount = 2;
   int wRCount = 2, bRCount = 2;
