@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <sstream>
 #include <vector>
 #include "Chess.h"
 using namespace std;
@@ -12,6 +13,11 @@ bool hasMoved2(vector < pair <string,pair <int,int> > > moves, string s);
 bool inCheck(string playerColor, chessBoard A, vector < pair <string,pair <int, int > > > movesList);
 pair <int,int> findKing(chessBoard A, string playerColor);
 bool isKing(chessBoard A, string playerColor);
+string to_string(int i) {
+  ostringstream convert;   // stream used for the conversion
+  convert << i;      // insert the textual representation of 'Number' in the characters in the stream
+  return convert.str();
+}
 int main()
 {
   vector < pair <string,pair <int, int > > > movesList;
