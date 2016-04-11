@@ -8,7 +8,7 @@ bool canCastle(vector < pair <string,pair <int, int > > > movesList,char pcolor,
   if (pcolor == 'W') {
     bool sawWR1 = false;
     bool sawWR2 = false;
-    for(int i = 0; i < movesList.size(); i++) {
+    for(unsigned int i = 0; i < movesList.size(); i++) {
       if(movesList[i].first == "WK0")
 	return false;
       else if(movesList[i].first == "WR1")
@@ -29,7 +29,7 @@ bool canCastle(vector < pair <string,pair <int, int > > > movesList,char pcolor,
   else {
     bool sawBR1 = false;
     bool sawBR2 = false;
-    for(int i = 0; i < movesList.size(); i++) {
+    for(unsigned int i = 0; i < movesList.size(); i++) {
       if(movesList[i].first == "BK0")
 	return false;
       else if(movesList[i].first == "BR1")
@@ -49,7 +49,7 @@ bool canCastle(vector < pair <string,pair <int, int > > > movesList,char pcolor,
   }
 }
 bool hasMoved(vector < pair <string,pair <int,int> > > moves, string s) {
-  for( int i = 0; i < moves.size(); i++ ) {
+  for(unsigned int i = 0; i < moves.size(); i++ ) {
     if( s == moves[i].first ) {
       return true;
     }
@@ -235,7 +235,7 @@ vector <pair <int, int> > chessPiece::validMoves(int x, int y, string playerColo
     knightMoves.push_back(make_pair(x-2,y-1));
     knightMoves.push_back(make_pair(x-2,y+1));
     knightMoves.push_back(make_pair(x-1,y+2));
-    for(int i = 0; i < knightMoves.size(); i++) {
+    for(unsigned int i = 0; i < knightMoves.size(); i++) {
       if(moveCheck(knightMoves[i].first,knightMoves[i].second) && !A.board[knightMoves[i].second][knightMoves[i].first].getFilled())
 	list.push_back(knightMoves[i]);
       else if(moveCheck(knightMoves[i].first,knightMoves[i].second) && A.board[knightMoves[i].second][knightMoves[i].first].getFill().getId()[0] != id[0])
@@ -436,7 +436,7 @@ vector <pair <int, int> > chessPiece::validMoves(int x, int y, string playerColo
     kingMoves.push_back(make_pair(x+1,y+1));
     kingMoves.push_back(make_pair(x-1,y+1));
     kingMoves.push_back(make_pair(x+1,y-1));
-    for(int i = 0; i < kingMoves.size(); i++) {
+    for(unsigned int i = 0; i < kingMoves.size(); i++) {
       if(moveCheck(kingMoves[i].first,kingMoves[i].second) && !A.board[kingMoves[i].second][kingMoves[i].first].getFilled())
 	list.push_back(kingMoves[i]);
       else if(moveCheck(kingMoves[i].first,kingMoves[i].second) && A.board[kingMoves[i].second][kingMoves[i].first].getFill().getId()[0] != id[0])

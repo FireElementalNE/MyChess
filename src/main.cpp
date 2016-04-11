@@ -3,6 +3,9 @@
 #include <sstream>
 #include <vector>
 #include "Chess.h"
+
+// TODO: I wrote this a long time ago, needs a major cleanup
+
 using namespace std;
 string whoseTurn(int turnNum);
 void init(chessBoard &A, bool testing, string test);
@@ -11,15 +14,14 @@ string turnText(int i, string bName, string wName);
 void addMove(vector < pair <string,pair <int, int > > > &movesList, pair <int,int> space, string name);
 bool hasMoved2(vector < pair <string,pair <int,int> > > moves, string s);
 bool inCheck(string playerColor, chessBoard A, vector < pair <string,pair <int, int > > > movesList);
-pair <int,int> findKing(chessBoard A, string playerColor);
+// pair <int,int> findKing(chessBoard A, string playerColor);
 bool isKing(chessBoard A, string playerColor);
-string to_string(int i) {
+string my_to_string(int i) {
   ostringstream convert;   // stream used for the conversion
   convert << i;      // insert the textual representation of 'Number' in the characters in the stream
   return convert.str();
 }
-int main()
-{
+int main() {
   vector < pair <string,pair <int, int > > > movesList;
   chessBoard A;
   init(A,false,"none");
@@ -47,7 +49,7 @@ int main()
     chessPiece temp;
     sureCheck = false;
     bool brokenLoop = false;
-    bool isInCheck = false;
+    // bool isInCheck = false; Not used
     if(!isKing(A,whoseTurn(turnNum))) {
       cout << "Game Over " << whoseTurn(turnNum) << " Wins." << endl;
       brokenLoop = true;
@@ -55,7 +57,7 @@ int main()
     }
     if(inCheck(whoseTurn(turnNum),A,movesList)) {
       cout << "You are in Check..." << endl;
-      isInCheck = true;
+      // isInCheck = true; Not used
     }
     while(!sureCheck) {
       cout << "Coordinates of Piece to move(no spaces): ";
@@ -107,12 +109,12 @@ int main()
     }
     if(moves.size() != 0) {
       cout << "You have " << moves.size() << " valid moves." << endl;
-      for(int i = 0; i < moves.size(); i++) {
+      for(unsigned int i = 0; i < moves.size(); i++) {
 	char c1 = moves[i].first + 97;
 	char c2 = -moves[i].second + 56;
 	cout << "[" << i << "]" <<" VALID MOVE @: " << c1 << " " << c2 << endl;
       }
-      int choice;
+      unsigned int choice;
       cout << ">";
       cin >> choice;
       if(choice >= moves.size()) {
@@ -164,19 +166,19 @@ int main()
 	    chessPiece queen = chessPiece("Queen");
 	    if (t0 == 0 ) {
 	      wKCount++;
-	      A.placePiece(newX,newY,knight,"WK"+to_string(wKCount));
+	      A.placePiece(newX,newY,knight,"WK"+my_to_string(wKCount));
 	    }
 	    else if (t0 == 1 ) {
 	      wBCount++;
-	      A.placePiece(newX,newY,bishop,"WB"+to_string(wBCount));
+	      A.placePiece(newX,newY,bishop,"WB"+my_to_string(wBCount));
 	    }
 	    else if (t0 == 2 ) {
 	      wRCount++;
-	      A.placePiece(newX,newY,rook,"WR"+to_string(wRCount));
+	      A.placePiece(newX,newY,rook,"WR"+my_to_string(wRCount));
 	    }
 	    else if (t0 == 3 ) {
 	      wQCount++;
-	      A.placePiece(newX,newY,queen,"WQ"+to_string(wQCount));
+	      A.placePiece(newX,newY,queen,"WQ"+my_to_string(wQCount));
 	    }
 	    addMove( movesList, make_pair(newY, newX) , A.board[newY][newX].getFill().getId());
 	  }
@@ -197,19 +199,19 @@ int main()
 	    chessPiece queen = chessPiece("Queen");
 	    if (t0 == 0 ) {
 	      bKCount++;
-	      A.placePiece(newX,newY,knight,"BK"+to_string(bKCount));
+	      A.placePiece(newX,newY,knight,"BK"+my_to_string(bKCount));
 	    }
 	    else if (t0 == 1 ) {
 	      bBCount++;
-	      A.placePiece(newX,newY,bishop,"BB"+to_string(bBCount));
+	      A.placePiece(newX,newY,bishop,"BB"+my_to_string(bBCount));
 	    }
 	    else if (t0 == 2 ) {
 	      bRCount++;
-	      A.placePiece(newX,newY,rook,"BR"+to_string(bRCount));
+	      A.placePiece(newX,newY,rook,"BR"+my_to_string(bRCount));
 	    }
 	    else if (t0 == 3 ) {
 	      bQCount++;
-	      A.placePiece(newX,newY,queen,"BQ"+to_string(bQCount));
+	      A.placePiece(newX,newY,queen,"BQ"+my_to_string(bQCount));
 	    }
 	    addMove( movesList, make_pair(newY, newX) , A.board[newY][newX].getFill().getId());
 	  }
@@ -246,7 +248,7 @@ bool isKing(chessBoard A, string playerColor){
   }
   return false;
 }
-pair <int,int> findKing(chessBoard A, string playerColor) {
+/*pair <int,int> findKing(chessBoard A, string playerColor) {
  for(int i = 0; i < 8; i++) {
     for (int j = 0; j < 8; j++) {
       if( A.board[i][j].getFill().getId()[0] == playerColor[0] && A.board[i][j].getFill().getType() == "King") {
@@ -254,7 +256,8 @@ pair <int,int> findKing(chessBoard A, string playerColor) {
       }
     }
   }
-}
+ return make_pair(-1, -1);
+}*/
 bool inCheck(string playerColor, chessBoard A, vector < pair <string,pair <int, int > > > movesList ) {
   vector <pair < chessPiece, pair < int,int > > > list;
   vector <pair < chessPiece, pair <int,int> > > potentialMoves;
@@ -275,17 +278,17 @@ bool inCheck(string playerColor, chessBoard A, vector < pair <string,pair <int, 
     }
   }
   cout << kingPlace.first << " " << kingPlace.second << endl;
-  for( int i = 0; i < list.size(); i++ ) {
+  for(unsigned int i = 0; i < list.size(); i++ ) {
     vector < pair <int,int> > t2;
     if(list[i].first.getId()[0] == 'B' )
       t2 = list[i].first.validMoves(list[i].second.second,list[i].second.first,"Black",A,movesList);
     else
       t2 = list[i].first.validMoves(list[i].second.second,list[i].second.first,"White",A,movesList);
-    for(int j = 0; j < t2.size(); j++) {
+    for(unsigned int j = 0; j < t2.size(); j++) {
       potentialMoves.push_back(make_pair(list[i].first,t2[j]));
     }
   }
-  for(int i = 0; i < potentialMoves.size(); i++ ) {
+  for(unsigned int i = 0; i < potentialMoves.size(); i++ ) {
     if(potentialMoves[i].second.first == kingPlace.first && potentialMoves[i].second.second == kingPlace.second) {      
       cout << potentialMoves[i].first.getId() << endl;
       return true;
@@ -294,14 +297,14 @@ bool inCheck(string playerColor, chessBoard A, vector < pair <string,pair <int, 
   return false;
 }
 string fixMe(string &s) {
-  for(int i = 0; i < s.length(); i++) {
+  for(unsigned int i = 0; i < s.length(); i++) {
     char temp = tolower(s[i]);
     s[i] = temp;
   }
   return s;
 }
 bool hasMoved2(vector < pair <string,pair <int,int> > > moves, string s) {
-  for( int i = 0; i < moves.size(); i++ ) {
+  for(unsigned int i = 0; i < moves.size(); i++ ) {
     if( s == moves[i].first ) {
       return true;
     }
